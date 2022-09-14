@@ -1,6 +1,6 @@
 from doctest import OutputChecker
 import pandas as pd
-import os
+import os, fnmatch, sys
 
 def transferExcelToCSV(targetPath, outputPath):
 
@@ -13,7 +13,7 @@ def transferExcelToCSV(targetPath, outputPath):
 
 def transferAllFiles(directoryPath):
     for currentDir, subDir, filesList in os.walk(directoryPath):
-        for fileName in filesList:
+        for fileName in fnmatch.filter(filesList, '*.xlsx'):
             targetPath = os.path.join(currentDir, fileName)
             fileName = os.path.splitext(os.path.basename(targetPath))[0] + '.csv'
             outputPath = os.path.join(currentDir, fileName)
@@ -23,4 +23,7 @@ def transferAllFiles(directoryPath):
             #Call function
             transferExcelToCSV(targetPath, outputPath)
 
-transferAllFiles('C:/Users/xxx/Downloads/test')
+args = sys.argv
+directoryPath = args[1]
+
+transferAllFiles(directoryPath)
